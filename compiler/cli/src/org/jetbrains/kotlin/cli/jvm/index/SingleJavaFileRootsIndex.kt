@@ -72,7 +72,8 @@ class SingleJavaFileRootsIndex(private val roots: List<JavaRoot>) {
 
         private fun tokenText(): String = lexer.tokenText
 
-        private fun atClass(): Boolean = at(ElementType.CLASS_KEYWORD) && braceBalance == 0
+        private fun atClass(): Boolean =
+                braceBalance == 0 && lexer.tokenType in CLASS_KEYWORDS
 
         fun readClassIds(): List<ClassId> {
             var packageFqName = FqName.ROOT
@@ -105,6 +106,10 @@ class SingleJavaFileRootsIndex(private val roots: List<JavaRoot>) {
             }
 
             return result
+        }
+
+        companion object {
+            private val CLASS_KEYWORDS = setOf(ElementType.CLASS_KEYWORD, ElementType.INTERFACE_KEYWORD, ElementType.ENUM_KEYWORD)
         }
     }
 }
